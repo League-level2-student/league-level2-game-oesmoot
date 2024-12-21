@@ -14,6 +14,8 @@ final int MENU = 0;
 final int GAME = 1;
 final int END = 2;
 int currentState = MENU;
+Player player = new Player(250,250,10,10,10);
+Zombie zombie = new Zombie(260,250,10,10,10);
 Font titleFont;
 Font enterFont;
 Timer frameDraw;
@@ -46,6 +48,9 @@ void drawEndState(Graphics g) {
 void drawGameState(Graphics g) {
 	g.setColor(Color.black);
 	g.fillRect(0, 0, RPGRunner.WIDTH, RPGRunner.HEIGHT);
+	player.draw(g);
+	zombie.draw(g);
+	
 }
 
 
@@ -89,6 +94,23 @@ public void keyPressed(KeyEvent e) {
 		else {
 			currentState++;
 		}
+	}
+	if(currentState == GAME) {
+		if(e.getKeyCode()==KeyEvent.VK_UP) {
+			player.y-=player.speed;
+		}
+		if(e.getKeyCode()==KeyEvent.VK_DOWN) {
+			player.y+=player.speed;
+		}
+		if(e.getKeyCode()==KeyEvent.VK_LEFT) {
+			player.x-=player.speed;
+		}
+		if(e.getKeyCode()==KeyEvent.VK_RIGHT) {
+			player.x+=player.speed;
+		}
+
+
+
 	}
 }
 
