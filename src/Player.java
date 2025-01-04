@@ -2,7 +2,9 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 public class Player extends GameObject{
-
+int maxHealth = 20;
+int health = maxHealth;
+int damage = 5;
 
 	
 	Player(int x, int y, int width, int height, int speed) {
@@ -14,5 +16,6 @@ public class Player extends GameObject{
 		g.setColor(Color.blue);
 		g.fillRect(x, y, width, height);
 	}
+	
 
 }
