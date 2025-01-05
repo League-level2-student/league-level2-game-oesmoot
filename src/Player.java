@@ -5,6 +5,8 @@ public class Player extends GameObject{
 int maxHealth = 20;
 int health = maxHealth;
 int damage = 5;
+int maxMP = 10;
+int MP = maxMP;
 
 	
 	Player(int x, int y, int width, int height, int speed) {

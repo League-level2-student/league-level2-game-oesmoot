@@ -7,6 +7,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Random;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -23,16 +24,19 @@ Font combatFont;
 Timer frameDraw;
 Random ran = new Random();
 int rand;
-Zombie zombie = new Zombie(220,200,50,50,10,10,1, 5);
-Skeleton skeleton = new Skeleton(220,200,50,50,10,10,2,5);
 Enemy enemy;
 int roll;
 int enemyChoice;
+final int ATTACK = 4;
+final int DEFEND = 5;
+final int MAGIC = 6;
+final int RUN = 7;
+int battleChoice = ATTACK;
 
 GamePanel(){
 	titleFont = new Font("Arial", Font.PLAIN,48);
 	enterFont = new Font("Arial", Font.PLAIN,25);
-	combatFont = new Font("Arial", Font.PLAIN, 30);
+	combatFont = new Font("Arial", Font.PLAIN, 27);
 	frameDraw = new Timer(1000/60, this);
 	frameDraw.start();
 }
@@ -65,12 +69,43 @@ void drawGameState(Graphics g) {
 void drawFightState(Graphics g) {
 	g.setColor(Color.black);
 	g.fillRect(0, 0, 500, 400);
+	g.setColor(Color.white);
+	g.fillRect(0, 401, 500, 100);
 	enemy.draw(g);
 	g.setColor(Color.black);
-	g.fillRect(10, 410, 200, 60);
+	g.fillRect(10, 410, 110, 50);
+	g.fillRect(130, 410, 110, 50);
+	g.fillRect(250, 410, 110, 50);
+	g.fillRect(370, 410, 110, 50);
 	g.setFont(combatFont);
 	g.setColor(Color.white);
-	g.drawString("attack", 10, 450);
+	g.drawString("ATTACK", 10, 445);
+	g.drawString("DEFEND", 130, 445);
+	g.drawString("MAGIC", 250, 445);
+	g.drawString("RUN", 370, 445);
+	g.drawString("HP: "+ String.valueOf(player.health)+"/"+ String.valueOf(player.maxHealth), 0, 25);
+	g.drawString("MP: " + String.valueOf(player.MP)+"/"+ String.valueOf(player.maxMP), 0, 50);
+	g.setColor(Color.red);
+	if(battleChoice == 4) {
+		g.fillRect(0, 410, 10, 50);
+		g.setColor(Color.yellow);
+		g.drawString("ATTACK", 10, 445);
+	}
+	if(battleChoice == 5) {
+		g.fillRect(120, 410, 10, 50);
+		g.setColor(Color.yellow);
+		g.drawString("DEFEND", 130, 445);
+	}
+	if(battleChoice == 6) {
+		g.fillRect(240, 410, 10, 50);
+		g.setColor(Color.yellow);
+		g.drawString("MAGIC", 250, 445);
+	}
+	if(battleChoice == 7) {
+		g.fillRect(360, 410, 10, 50);
+		g.setColor(Color.yellow);
+		g.drawString("RUN", 370, 445);
+	}
 }
 	
 
@@ -116,39 +151,47 @@ public void keyTyped(KeyEvent e) {
 public void keyPressed(KeyEvent e) {
 	// TODO Auto-generated method stub
 	if(e.getKeyCode()==KeyEvent.VK_ENTER) {
+		if(currentState == MENU) {
+			currentState = GAME;
+		}
 		if(currentState == END) {
 			currentState = MENU;
-		}
-		else {
-			currentState++;
 		}
 	}
 	if(currentState == GAME) {
 		if(e.getKeyCode()==KeyEvent.VK_UP) {
-			player.y-=player.speed;
-			rand = ran.nextInt(20);
+			if(player.y>0) {
+				player.y-=player.speed;
+			}
+			rand = ran.nextInt(100);
 			if(rand == 1) {
 				currentState = FIGHT;
 				
 			}
 		}
 		if(e.getKeyCode()==KeyEvent.VK_DOWN) {
-			player.y+=player.speed;
-			rand = ran.nextInt(20);
+			if(player.y<490) {
+				player.y+=player.speed;
+			}
+			rand = ran.nextInt(100);
 			if(rand == 1) {
 				currentState = FIGHT;
 			}
 		}
 		if(e.getKeyCode()==KeyEvent.VK_LEFT) {
-			player.x-=player.speed;
-			rand = ran.nextInt(20);
+			if(player.x>0) {
+				player.x-=player.speed;
+			}
+			rand = ran.nextInt(100);
 			if(rand == 1) {
 				currentState = FIGHT;
 			}
 		}
 		if(e.getKeyCode()==KeyEvent.VK_RIGHT) {
-			player.x+=player.speed;
-			rand = ran.nextInt(20);
+			if(player.x<490) {
+				player.x+=player.speed;
+			}
+			rand = ran.nextInt(100);
 			if(rand == 1) {
 				currentState = FIGHT;
 			}
@@ -166,18 +209,47 @@ if(currentState == FIGHT) {
 
 	}
 	if(currentState == FIGHT) {
+		if(e.getKeyCode()==KeyEvent.VK_LEFT) {
+			if(battleChoice>4) {
+				battleChoice--;
+			}
+		}
+		
+		if(e.getKeyCode()==KeyEvent.VK_RIGHT) {
+			if(battleChoice<7) {
+				battleChoice++;
+			}
+		}
+		
 		if(e.getKeyCode()==KeyEvent.VK_SPACE) {
-			roll = ran.nextInt(2);
-			if(roll == 1) {
-				zombie.health -= player.damage;
+			if(battleChoice==4) {
+				roll = ran.nextInt(2);
+				if(roll == 1) {
+					enemy.health -= player.damage;
+				}
+				roll = ran.nextInt(2);
+				if(roll == 1) {
+					player.health -= enemy.damage;
+				}
+				if(enemy.health<=0) {
+					currentState=GAME;
+					enemy.health = enemy.maxHealth;
+				}
 			}
-			roll = ran.nextInt(2);
-			if(roll == 1) {
-				player.health -= zombie.damage;
+			if(battleChoice==5) {
+				roll = ran.nextInt(5);
+				if(roll == 1) {
+					player.health-= enemy.damage;
+				}
 			}
-			if(zombie.health<=0) {
-				currentState=GAME;
-				zombie.health = zombie.maxHealth;
+			if(battleChoice==6) {
+				JOptionPane.showMessageDialog(null, "get to work on the magic menu, owen!");
+			}
+			if(battleChoice==7) {
+				roll = ran.nextInt(3);
+				enemy.health = enemy.maxHealth;
+				currentState = GAME;
+				
 			}
 			if(player.health<=0) {
 				currentState = END;
@@ -209,5 +281,6 @@ public void actionPerformed(ActionEvent e) {
 		updateFightState();
 	}
 	repaint();
+
 }
 }

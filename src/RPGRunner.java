@@ -2,8 +2,8 @@ import javax.swing.JFrame;
 
 public class RPGRunner {
 JFrame frame;
-public static final int WIDTH = 500;
-public static final int HEIGHT = 500;
+public static final int WIDTH = 514;
+public static final int HEIGHT = 537;
 GamePanel gPanel;
 
 RPGRunner(){
