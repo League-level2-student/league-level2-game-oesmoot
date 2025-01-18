@@ -32,6 +32,15 @@ final int DEFEND = 5;
 final int MAGIC = 6;
 final int RUN = 7;
 int battleChoice = ATTACK;
+boolean isDoingMagic = false;
+Spell spell1 = new Fireball(2,1,99);
+Spell spell2 = new Fireball(2,1,99);
+Spell spell3 = new Fireball(2,1,99);
+Spell spell4 = new Fireball(2,1,99);
+String firstSpell = "fireball";
+String secondSpell = "fireball";
+String thirdSpell = "fireball";
+String fourthSpell = "fireball";
 
 GamePanel(){
 	titleFont = new Font("Arial", Font.PLAIN,48);
@@ -79,12 +88,13 @@ void drawFightState(Graphics g) {
 	g.fillRect(370, 410, 110, 50);
 	g.setFont(combatFont);
 	g.setColor(Color.white);
+	g.drawString("HP: "+ String.valueOf(player.health)+"/"+ String.valueOf(player.maxHealth), 0, 25);
+	g.drawString("MP: " + String.valueOf(player.MP)+"/"+ String.valueOf(player.maxMP), 0, 50);
+	if(!isDoingMagic) {
 	g.drawString("ATTACK", 10, 445);
 	g.drawString("DEFEND", 130, 445);
 	g.drawString("MAGIC", 250, 445);
 	g.drawString("RUN", 370, 445);
-	g.drawString("HP: "+ String.valueOf(player.health)+"/"+ String.valueOf(player.maxHealth), 0, 25);
-	g.drawString("MP: " + String.valueOf(player.MP)+"/"+ String.valueOf(player.maxMP), 0, 50);
 	g.setColor(Color.red);
 	if(battleChoice == 4) {
 		g.fillRect(0, 410, 10, 50);
@@ -105,6 +115,34 @@ void drawFightState(Graphics g) {
 		g.fillRect(360, 410, 10, 50);
 		g.setColor(Color.yellow);
 		g.drawString("RUN", 370, 445);
+	}
+	}
+	if(isDoingMagic) {
+		g.drawString(firstSpell, 10, 445);
+		g.drawString(secondSpell, 130, 445);
+		g.drawString(thirdSpell, 250, 445);
+		g.drawString(fourthSpell, 370, 445);
+		g.setColor(Color.red);
+		if(battleChoice == 4) {
+			g.fillRect(0, 410, 10, 50);
+			g.setColor(Color.yellow);
+			g.drawString(firstSpell, 10, 445);
+		}
+		if(battleChoice == 5) {
+			g.fillRect(120, 410, 10, 50);
+			g.setColor(Color.yellow);
+			g.drawString(secondSpell, 130, 445);
+		}
+		if(battleChoice == 6) {
+			g.fillRect(240, 410, 10, 50);
+			g.setColor(Color.yellow);
+			g.drawString(thirdSpell, 250, 445);
+		}
+		if(battleChoice == 7) {
+			g.fillRect(360, 410, 10, 50);
+			g.setColor(Color.yellow);
+			g.drawString(fourthSpell, 370, 445);
+		}
 	}
 }
 	
@@ -222,6 +260,7 @@ if(currentState == FIGHT) {
 		}
 		
 		if(e.getKeyCode()==KeyEvent.VK_SPACE) {
+			if(!isDoingMagic) {
 			if(battleChoice==4) {
 				roll = ran.nextInt(2);
 				if(roll == 1) {
@@ -243,7 +282,7 @@ if(currentState == FIGHT) {
 				}
 			}
 			if(battleChoice==6) {
-				JOptionPane.showMessageDialog(null, "get to work on the magic menu, owen!");
+				isDoingMagic = true;
 			}
 			if(battleChoice==7) {
 				roll = ran.nextInt(3);
@@ -254,6 +293,63 @@ if(currentState == FIGHT) {
 			if(player.health<=0) {
 				currentState = END;
 				player.health = player.maxHealth;
+			}
+		}
+			if(isDoingMagic) {
+				if(battleChoice == 4) {
+					player.castSpell(enemy, spell1, ran);
+					roll = ran.nextInt(2);
+					if(roll == 1) {
+						player.health -= enemy.damage;
+					}
+					if(enemy.health<=0) {
+						currentState=GAME;
+						enemy.health = enemy.maxHealth;
+					}
+				}
+				if(battleChoice == 5) {
+					player.castSpell(enemy, spell2, ran);
+					roll = ran.nextInt(2);
+					if(roll == 1) {
+						player.health -= enemy.damage;
+					}
+					if(enemy.health<=0) {
+						currentState=GAME;
+						enemy.health = enemy.maxHealth;
+					}
+				}
+				if(battleChoice == 6) {
+					player.castSpell(enemy, spell3, ran);
+					roll = ran.nextInt(2);
+					if(roll == 1) {
+						player.health -= enemy.damage;
+					}
+					if(enemy.health<=0) {
+						currentState=GAME;
+						enemy.health = enemy.maxHealth;
+					}
+				}
+				if(battleChoice == 7) {
+					player.castSpell(enemy, spell4, ran);
+					roll = ran.nextInt(2);
+					if(roll == 1) {
+						player.health -= enemy.damage;
+					}
+					if(enemy.health<=0) {
+						currentState=GAME;
+						enemy.health = enemy.maxHealth;
+					}
+				}
+				if(player.health<=0) {
+					currentState = END;
+					player.health = player.maxHealth;
+					player.MP = player.maxMP;
+				}
+			}
+		}
+		if(e.getKeyCode()==KeyEvent.VK_ESCAPE) {
+			if(isDoingMagic) {
+				isDoingMagic = false;
 			}
 		}
 	}
