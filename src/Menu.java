@@ -4,25 +4,23 @@ import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
 
-public class Skeleton extends Enemy {
+public class Menu {
 	public static BufferedImage image;
 	public static boolean needImage = true;
 	public static boolean gotImage = false;
-	
-	Skeleton(int x, int y, int width, int height, int maxHealth, int health, int damage, int XP) {
-		super(x, y, width, height, maxHealth, health, damage, XP);
-		// TODO Auto-generated constructor stub
+
+	Menu(){
 		if (needImage) {
-			loadImage("skeleton.png");
+			loadImage("titleScreen.png");
 		}
 	}
-
-	public void draw(Graphics g) {
+	
+	void draw(Graphics g) {
 		if (gotImage) {
-			g.drawImage(image, x, y, width, height, null);
+			g.drawImage(image, 0,0,500,500, null);
 		} else {
-			g.setColor(Color.GREEN);
-			g.fillRect(x, y, width, height);
+			g.setColor(Color.BLUE);
+			g.fillRect(0,0,500,500);
 		}
 	}
 
@@ -37,5 +35,4 @@ public class Skeleton extends Enemy {
 			needImage = false;
 		}
 	}
-
 }
