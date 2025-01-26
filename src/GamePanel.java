@@ -46,6 +46,11 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	String thirdSpell = "fireball";
 	String fourthSpell = "fireball";
 	Menu menu = new Menu();
+	Mountain mountain = new Mountain();
+	final int OVERWORLD = 1;
+	final int MOUNTAIN = 2;
+	int location = OVERWORLD;
+	MountainLocation mtl = new MountainLocation();
 	
 	GamePanel() {
 		titleFont = new Font("Arial", Font.PLAIN, 48);
@@ -68,10 +73,29 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	}
 
 	void drawGameState(Graphics g) {
-		g.setColor(Color.black);
+		if(location == OVERWORLD) {
+		g.setColor(Color.green);
 		g.fillRect(0, 0, RPGRunner.WIDTH, RPGRunner.HEIGHT);
+		mountain.draw(g);
 		player.draw(g);
-
+		if(player.x>=0&&player.x<=100&&player.y>=0&&player.y<=100) {
+			location = MOUNTAIN;
+			player.x = 250;
+			player.y = 250;
+		}
+		}
+		if(location == MOUNTAIN) {
+			//g.setColor(Color.gray);
+			//g.fillRect(0, 0, RPGRunner.WIDTH, RPGRunner.HEIGHT);
+			mtl.checkLocation(player);
+			mtl.drawLocation(g);
+			player.draw(g);
+			if(player.y<=500&&player.y>=490) {
+				location = OVERWORLD;
+				player.x =50;
+				player.y = 110;
+			}
+		}
 	}
 
 	void drawFightState(Graphics g) {
@@ -180,98 +204,6 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	@Override
 	public void keyTyped(KeyEvent e) {
 
-		// TODO Auto-generated method stub
-//		if(currentState == FIGHT) {
-//		if (e.getExtendedKeyCode() == KeyEvent.VK_SPACE) {
-//			System.out.println("space");
-//			if (!isDoingMagic) {
-//				if (battleChoice == 4) {
-//					roll = ran.nextInt(2);
-//					if (roll == 1) {
-//						enemy.health -= player.damage;
-//					}
-//					roll = ran.nextInt(2);
-//					if (roll == 1) {
-//						player.health -= enemy.damage;
-//					}
-//					if (enemy.health <= 0) {
-//						currentState = GAME;
-//						enemy.health = enemy.maxHealth;
-//					}
-//				}
-//				if (battleChoice == 5) {
-//					roll = ran.nextInt(5);
-//					if (roll == 1) {
-//						player.health -= enemy.damage;
-//					}
-//				}
-//				if (battleChoice == 6) {
-//					isDoingMagic = true;
-//				}
-//				if (battleChoice == 7) {
-//					roll = ran.nextInt(3);
-//					enemy.health = enemy.maxHealth;
-//					currentState = GAME;
-//
-//				}
-//				if (player.health <= 0) {
-//					currentState = END;
-//					player.health = player.maxHealth;
-//				}
-//			}
-//			if (isDoingMagic) {
-//				if (battleChoice == 4) {
-//					player.castSpell(enemy, spell1, ran);
-//					roll = ran.nextInt(2);
-//					if (roll == 1) {
-//						player.health -= enemy.damage;
-//					}
-//					if (enemy.health <= 0) {
-//						currentState = GAME;
-//						enemy.health = enemy.maxHealth;
-//					}
-//				}
-//				if (battleChoice == 5) {
-//					player.castSpell(enemy, spell2, ran);
-//					roll = ran.nextInt(2);
-//					if (roll == 1) {
-//						player.health -= enemy.damage;
-//					}
-//					if (enemy.health <= 0) {
-//						currentState = GAME;
-//						enemy.health = enemy.maxHealth;
-//					}
-//				}
-//				if (battleChoice == 6) {
-//					player.castSpell(enemy, spell3, ran);
-//					roll = ran.nextInt(2);
-//					if (roll == 1) {
-//						player.health -= enemy.damage;
-//					}
-//					if (enemy.health <= 0) {
-//						currentState = GAME;
-//						enemy.health = enemy.maxHealth;
-//					}
-//				}
-//				if (battleChoice == 7) {
-//					player.castSpell(enemy, spell4, ran);
-//					roll = ran.nextInt(2);
-//					if (roll == 1) {
-//						player.health -= enemy.damage;
-//					}
-//					if (enemy.health <= 0) {
-//						currentState = GAME;
-//						enemy.health = enemy.maxHealth;
-//					}
-//				}
-//				if (player.health <= 0) {
-//					currentState = END;
-//					player.health = player.maxHealth;
-//					player.MP = player.maxMP;
-//				}
-//			}
-//		}
-//		}
 	}
 
 	@Override
