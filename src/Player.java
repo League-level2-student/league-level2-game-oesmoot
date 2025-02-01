@@ -11,6 +11,8 @@ public class Player extends GameObject {
 	int damage = 5;
 	int maxMP = 10;
 	int MP = maxMP;
+	int XPNeedTotal = 100;
+	int XPNeed = XPNeedTotal;
 	public static BufferedImage image;
 	public static boolean needImage = true;
 	public static boolean gotImage = false;

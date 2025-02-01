@@ -99,7 +99,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	}
 
 	void drawFightState(Graphics g) {
-		g.setColor(Color.black);
+		g.setColor(Color.gray);
 		g.fillRect(0, 0, 500, 400);
 		g.setColor(Color.white);
 		g.fillRect(0, 401, 500, 100);
@@ -113,6 +113,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		g.setColor(Color.white);
 		g.drawString("HP: " + String.valueOf(player.health) + "/" + String.valueOf(player.maxHealth), 0, 25);
 		g.drawString("MP: " + String.valueOf(player.MP) + "/" + String.valueOf(player.maxMP), 0, 50);
+		g.drawString("enemy: " + String.valueOf(enemy.health)+ "/" + String.valueOf(enemy.maxHealth), 0, 75);
 		if (!isDoingMagic) {
 			g.drawString("ATTACK", 10, 445);
 			g.drawString("DEFEND", 130, 445);
@@ -260,7 +261,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 			if (currentState == FIGHT) {
 				enemyChoice = ran.nextInt(2);
 				if (enemyChoice == 0) {
-					enemy = new Skeleton(220, 200, 50, 50, 10, 10, 2, 5);
+					enemy = new Skeleton(220, 200, 50, 50, 10, 10, 2, 10);
 				} else if (enemyChoice == 1) {
 					enemy = new Zombie(220, 200, 50, 50, 10, 10, 1, 5);
 				}
@@ -308,6 +309,21 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 						if (enemy.health <= 0) {
 							currentState = GAME;
 							enemy.health = enemy.maxHealth;
+							player.XPNeed -= enemy.XP;
+							player.health+=player.damage;
+							if(player.health>player.maxHealth) {
+								player.health = player.maxHealth;
+							}
+							if(player.XPNeed<=0) {
+								player.maxHealth +=5;
+								player.health = player.maxHealth;
+								player.maxMP += 5;
+								player.MP = player.maxMP;
+								player.damage++;
+								player.XPNeedTotal+=50;
+								player.XPNeed = player.XPNeedTotal;
+								JOptionPane.showMessageDialog(null, "Congrats! You leveled up!");
+							}
 						}
 					}
 					if (battleChoice == 5) {
@@ -340,6 +356,21 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 						if (enemy.health <= 0) {
 							currentState = GAME;
 							enemy.health = enemy.maxHealth;
+							player.XPNeed -= enemy.XP;
+							player.health+=player.damage;
+							if(player.health>player.maxHealth) {
+								player.health = player.maxHealth;
+							}
+							if(player.XPNeed<=0) {
+								player.maxHealth +=5;
+								player.health = player.maxHealth;
+								player.maxMP += 5;
+								player.MP = player.maxMP;
+								player.damage++;
+								player.XPNeedTotal+=50;
+								player.XPNeed = player.XPNeedTotal;
+								JOptionPane.showMessageDialog(null, "Congrats! You leveled up!");
+							}
 						}
 					}
 					if (battleChoice == 5) {
@@ -351,6 +382,21 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 						if (enemy.health <= 0) {
 							currentState = GAME;
 							enemy.health = enemy.maxHealth;
+							player.XPNeed -= enemy.XP;
+							player.health+=player.damage;
+							if(player.health>player.maxHealth) {
+								player.health = player.maxHealth;
+							}
+							if(player.XPNeed<=0) {
+								player.maxHealth +=5;
+								player.health = player.maxHealth;
+								player.maxMP += 5;
+								player.MP = player.maxMP;
+								player.damage++;
+								player.XPNeedTotal+=50;
+								player.XPNeed = player.XPNeedTotal;
+								JOptionPane.showMessageDialog(null, "Congrats! You leveled up!");
+							}
 						}
 					}
 					if (battleChoice == 6) {
@@ -373,6 +419,21 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 						if (enemy.health <= 0) {
 							currentState = GAME;
 							enemy.health = enemy.maxHealth;
+							player.XPNeed -= enemy.XP;
+							player.health+=player.damage;
+							if(player.health>player.maxHealth) {
+								player.health = player.maxHealth;
+							}
+							if(player.XPNeed<=0) {
+								player.maxHealth +=5;
+								player.health = player.maxHealth;
+								player.maxMP += 5;
+								player.MP = player.maxMP;
+								player.damage++;
+								player.XPNeedTotal+=50;
+								player.XPNeed = player.XPNeedTotal;
+								JOptionPane.showMessageDialog(null, "Congrats! You leveled up!");
+							}
 						}
 					}
 					if (player.health <= 0) {
