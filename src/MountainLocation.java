@@ -7,6 +7,8 @@ public class MountainLocation {
 int location =1;
 House house1 = new House(50,50,100,100);
 NPC npc1 = new NPC(250,250,10,10);
+boolean dragon = false;
+boolean dragonDead = false;
 MountainLocation(){
 	
 }
@@ -28,6 +30,10 @@ MountainLocation(){
 				location = 1;
 				player.y = 20;
 			}
+			if(player.y>=0&&player.y<=10) {
+				location =4;
+				player.y = 480;
+			}
 		}
 		if(location == 3) {
 			if(player.x==250&&player.y==250) {
@@ -40,6 +46,22 @@ MountainLocation(){
 				player.y = 170;
 				player.x = 90;
 			}
+		}
+		if(location == 4) {
+			if(player.y<=500&&player.y>=490) {
+				location = 2;
+				player.y = 20;
+			}
+			if(!dragonDead) {
+				if(player.y>=140&&player.y<=340&&player.x>=140&&player.x<=340) {
+					player.x = 230;
+					player.y = 350;
+					JOptionPane.showMessageDialog(null, "raah!");
+					dragon = true;
+					
+				}
+			}
+			
 		}
 	}
 	
@@ -57,6 +79,14 @@ MountainLocation(){
 			g.setColor(Color.orange);
 			g.fillRect(0, 0, RPGRunner.WIDTH, RPGRunner.HEIGHT);
 			npc1.draw(g);
+		}
+		else if(location == 4) {
+			g.setColor(Color.gray);
+			g.fillRect(0, 0, RPGRunner.WIDTH, RPGRunner.HEIGHT);
+			if(!dragonDead) {
+				g.setColor(Color.red);
+				g.fillRect(140, 140, 200, 200);
+			}
 		}
 	}
 }

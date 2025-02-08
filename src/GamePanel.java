@@ -51,7 +51,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	final int MOUNTAIN = 2;
 	int location = OVERWORLD;
 	MountainLocation mtl = new MountainLocation();
-	
+	Grass grass = new Grass();
+
 	GamePanel() {
 		titleFont = new Font("Arial", Font.PLAIN, 48);
 		enterFont = new Font("Arial", Font.PLAIN, 25);
@@ -73,27 +74,29 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	}
 
 	void drawGameState(Graphics g) {
-		if(location == OVERWORLD) {
-		g.setColor(Color.green);
-		g.fillRect(0, 0, RPGRunner.WIDTH, RPGRunner.HEIGHT);
-		mountain.draw(g);
-		player.draw(g);
-		if(player.x>=0&&player.x<=100&&player.y>=0&&player.y<=100) {
-			location = MOUNTAIN;
-			player.x = 250;
-			player.y = 250;
+		if (location == OVERWORLD) {
+			grass.draw(g);
+			mountain.draw(g);
+			player.draw(g);
+			if (player.x >= 0 && player.x <= 100 && player.y >= 0 && player.y <= 100) {
+				location = MOUNTAIN;
+				player.x = 250;
+				player.y = 250;
+			}
 		}
-		}
-		if(location == MOUNTAIN) {
-			//g.setColor(Color.gray);
-			//g.fillRect(0, 0, RPGRunner.WIDTH, RPGRunner.HEIGHT);
+		if (location == MOUNTAIN) {
+			// g.setColor(Color.gray);
+			// g.fillRect(0, 0, RPGRunner.WIDTH, RPGRunner.HEIGHT);
 			mtl.checkLocation(player);
 			mtl.drawLocation(g);
 			player.draw(g);
-			if(player.y<=500&&player.y>=490) {
+			if (player.y <= 500 && player.y >= 490) {
 				location = OVERWORLD;
-				player.x =50;
+				player.x = 50;
 				player.y = 110;
+			}
+			if (mtl.dragon) {
+				currentState = FIGHT;
 			}
 		}
 	}
@@ -113,7 +116,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		g.setColor(Color.white);
 		g.drawString("HP: " + String.valueOf(player.health) + "/" + String.valueOf(player.maxHealth), 0, 25);
 		g.drawString("MP: " + String.valueOf(player.MP) + "/" + String.valueOf(player.maxMP), 0, 50);
-		g.drawString("enemy: " + String.valueOf(enemy.health)+ "/" + String.valueOf(enemy.maxHealth), 0, 75);
+		g.drawString("enemy: " + String.valueOf(enemy.health) + "/" + String.valueOf(enemy.maxHealth), 0, 75);
 		if (!isDoingMagic) {
 			g.drawString("ATTACK", 10, 445);
 			g.drawString("DEFEND", 130, 445);
@@ -209,7 +212,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		System.out.println("keypressed: "  +  e.getKeyCode());
+		System.out.println("keypressed: " + e.getKeyCode());
 		// TODO Auto-generated method stub
 		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 			if (currentState == MENU) {
@@ -257,16 +260,23 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 					currentState = FIGHT;
 				}
 			}
-
+//TODO:   this code doesn't get reached when current state gets set to FIGHT in the MountainLocation class.
+// 		  move this out of the if currentSTate==GAME section, and only let it run once. it should run as soon as
+//        the currentSTate gets set to FIGHT
 			if (currentState == FIGHT) {
-				enemyChoice = ran.nextInt(2);
-				if (enemyChoice == 0) {
-					enemy = new Skeleton(220, 200, 50, 50, 10, 10, 2, 10);
-				} else if (enemyChoice == 1) {
-					enemy = new Zombie(220, 200, 50, 50, 10, 10, 1, 5);
+				if (mtl.dragon == false) {
+					enemyChoice = ran.nextInt(2);
+					if (enemyChoice == 0) {
+						enemy = new Skeleton(220, 200, 50, 50, 10, 10, 2, 10);
+					} else if (enemyChoice == 1) {
+						enemy = new Zombie(220, 200, 50, 50, 10, 10, 1, 5);
+					}
 				}
-			}
+				else {
+					enemy = new Dragon(220, 200, 50, 50, 50, 50, 5, 1000);
+				}
 
+			}
 		}
 		if (currentState == FIGHT) {
 			if (e.getKeyCode() == KeyEvent.VK_LEFT) {
@@ -287,13 +297,14 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 				}
 			}
 		}
+
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
-		
-		if(currentState == FIGHT) {
+
+		if (currentState == FIGHT) {
 			if (e.getExtendedKeyCode() == KeyEvent.VK_SPACE) {
 				System.out.println("space");
 				if (!isDoingMagic) {
@@ -307,20 +318,23 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 							player.health -= enemy.damage;
 						}
 						if (enemy.health <= 0) {
+							if (mtl.dragon) {
+								mtl.dragon = false;
+							}
 							currentState = GAME;
 							enemy.health = enemy.maxHealth;
 							player.XPNeed -= enemy.XP;
-							player.health+=player.damage;
-							if(player.health>player.maxHealth) {
+							player.health += player.damage;
+							if (player.health > player.maxHealth) {
 								player.health = player.maxHealth;
 							}
-							if(player.XPNeed<=0) {
-								player.maxHealth +=5;
+							if (player.XPNeed <= 0) {
+								player.maxHealth += 5;
 								player.health = player.maxHealth;
 								player.maxMP += 5;
 								player.MP = player.maxMP;
 								player.damage++;
-								player.XPNeedTotal+=50;
+								player.XPNeedTotal += 50;
 								player.XPNeed = player.XPNeedTotal;
 								JOptionPane.showMessageDialog(null, "Congrats! You leveled up!");
 							}
@@ -354,20 +368,23 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 							player.health -= enemy.damage;
 						}
 						if (enemy.health <= 0) {
+							if (mtl.dragon) {
+								mtl.dragon = false;
+							}
 							currentState = GAME;
 							enemy.health = enemy.maxHealth;
 							player.XPNeed -= enemy.XP;
-							player.health+=player.damage;
-							if(player.health>player.maxHealth) {
+							player.health += player.damage;
+							if (player.health > player.maxHealth) {
 								player.health = player.maxHealth;
 							}
-							if(player.XPNeed<=0) {
-								player.maxHealth +=5;
+							if (player.XPNeed <= 0) {
+								player.maxHealth += 5;
 								player.health = player.maxHealth;
 								player.maxMP += 5;
 								player.MP = player.maxMP;
 								player.damage++;
-								player.XPNeedTotal+=50;
+								player.XPNeedTotal += 50;
 								player.XPNeed = player.XPNeedTotal;
 								JOptionPane.showMessageDialog(null, "Congrats! You leveled up!");
 							}
@@ -380,20 +397,23 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 							player.health -= enemy.damage;
 						}
 						if (enemy.health <= 0) {
+							if (mtl.dragon) {
+								mtl.dragon = false;
+							}
 							currentState = GAME;
 							enemy.health = enemy.maxHealth;
 							player.XPNeed -= enemy.XP;
-							player.health+=player.damage;
-							if(player.health>player.maxHealth) {
+							player.health += player.damage;
+							if (player.health > player.maxHealth) {
 								player.health = player.maxHealth;
 							}
-							if(player.XPNeed<=0) {
-								player.maxHealth +=5;
+							if (player.XPNeed <= 0) {
+								player.maxHealth += 5;
 								player.health = player.maxHealth;
 								player.maxMP += 5;
 								player.MP = player.maxMP;
 								player.damage++;
-								player.XPNeedTotal+=50;
+								player.XPNeedTotal += 50;
 								player.XPNeed = player.XPNeedTotal;
 								JOptionPane.showMessageDialog(null, "Congrats! You leveled up!");
 							}
@@ -406,6 +426,9 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 							player.health -= enemy.damage;
 						}
 						if (enemy.health <= 0) {
+							if (mtl.dragon) {
+								mtl.dragon = false;
+							}
 							currentState = GAME;
 							enemy.health = enemy.maxHealth;
 						}
@@ -417,20 +440,23 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 							player.health -= enemy.damage;
 						}
 						if (enemy.health <= 0) {
+							if (mtl.dragon) {
+								mtl.dragon = false;
+							}
 							currentState = GAME;
 							enemy.health = enemy.maxHealth;
 							player.XPNeed -= enemy.XP;
-							player.health+=player.damage;
-							if(player.health>player.maxHealth) {
+							player.health += player.damage;
+							if (player.health > player.maxHealth) {
 								player.health = player.maxHealth;
 							}
-							if(player.XPNeed<=0) {
-								player.maxHealth +=5;
+							if (player.XPNeed <= 0) {
+								player.maxHealth += 5;
 								player.health = player.maxHealth;
 								player.maxMP += 5;
 								player.MP = player.maxMP;
 								player.damage++;
-								player.XPNeedTotal+=50;
+								player.XPNeedTotal += 50;
 								player.XPNeed = player.XPNeedTotal;
 								JOptionPane.showMessageDialog(null, "Congrats! You leveled up!");
 							}
@@ -443,7 +469,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 					}
 				}
 			}
-			}
+		}
 
 	}
 
