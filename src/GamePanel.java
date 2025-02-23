@@ -47,6 +47,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	String fourthSpell = "fireball";
 	Menu menu = new Menu();
 	Mountain mountain = new Mountain();
+	Dungeon dungeon = new Dungeon();
 	final int OVERWORLD = 1;
 	final int MOUNTAIN = 2;
 	int location = OVERWORLD;
@@ -78,6 +79,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 			grass.draw(g);
 			mountain.draw(g);
 			player.draw(g);
+			dungeon.draw(g);
 			if (player.x >= 0 && player.x <= 100 && player.y >= 0 && player.y <= 100) {
 				location = MOUNTAIN;
 				player.x = 250;
@@ -97,6 +99,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 			}
 			if (mtl.dragon) {
 				currentState = FIGHT;
+				changeToFight();
 			}
 		}
 	}
@@ -204,6 +207,23 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 			drawFightState(g);
 		}
 	}
+	
+	public void changeToFight() {
+		if (currentState == FIGHT) {
+			if (mtl.dragon == false) {
+				enemyChoice = ran.nextInt(2);
+				if (enemyChoice == 0) {
+					enemy = new Skeleton(170, 150, 150, 150, 10, 10, 2, 50);
+				} else if (enemyChoice == 1) {
+					enemy = new Zombie(170, 150, 150, 150, 10, 10, 1, 20);
+				}
+			}
+			if(mtl.dragon) {
+				enemy = new Dragon(170, 150, 150, 150, 50, 50, 5, 1000);
+			}
+
+		}
+	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
@@ -212,7 +232,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		System.out.println("keypressed: " + e.getKeyCode());
+		//System.out.println("keypressed: " + e.getKeyCode());
 		// TODO Auto-generated method stub
 		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 			if (currentState == MENU) {
@@ -230,6 +250,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 				rand = ran.nextInt(100);
 				if (rand == 1) {
 					currentState = FIGHT;
+					changeToFight();
 
 				}
 			}
@@ -240,6 +261,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 				rand = ran.nextInt(100);
 				if (rand == 1) {
 					currentState = FIGHT;
+					changeToFight();
 				}
 			}
 			if (e.getKeyCode() == KeyEvent.VK_LEFT) {
@@ -249,6 +271,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 				rand = ran.nextInt(100);
 				if (rand == 1) {
 					currentState = FIGHT;
+					changeToFight();
 				}
 			}
 			if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
@@ -258,26 +281,16 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 				rand = ran.nextInt(100);
 				if (rand == 1) {
 					currentState = FIGHT;
+					changeToFight();
 				}
 			}
 //TODO:   this code doesn't get reached when current state gets set to FIGHT in the MountainLocation class.
-// 		  move this out of the if currentSTate==GAME section, and only let it run once. it should run as soon as
-//        the currentSTate gets set to FIGHT
-			if (currentState == FIGHT) {
-				if (mtl.dragon == false) {
-					enemyChoice = ran.nextInt(2);
-					if (enemyChoice == 0) {
-						enemy = new Skeleton(220, 200, 50, 50, 10, 10, 2, 10);
-					} else if (enemyChoice == 1) {
-						enemy = new Zombie(220, 200, 50, 50, 10, 10, 1, 5);
-					}
-				}
-				else {
-					enemy = new Dragon(220, 200, 50, 50, 50, 50, 5, 1000);
-				}
-
-			}
+// 		  move this out of the if currentState==GAME section, and only let it run once. it should run as soon as
+//        the currentState gets set to FIGHT
+		
 		}
+		
+		
 		if (currentState == FIGHT) {
 			if (e.getKeyCode() == KeyEvent.VK_LEFT) {
 				if (battleChoice > 4) {
@@ -300,6 +313,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 
 	}
 
+
+
 	@Override
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
@@ -320,6 +335,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 						if (enemy.health <= 0) {
 							if (mtl.dragon) {
 								mtl.dragon = false;
+								mtl.dragonDead = true;
 							}
 							currentState = GAME;
 							enemy.health = enemy.maxHealth;
@@ -370,6 +386,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 						if (enemy.health <= 0) {
 							if (mtl.dragon) {
 								mtl.dragon = false;
+								mtl.dragonDead = true;
 							}
 							currentState = GAME;
 							enemy.health = enemy.maxHealth;
@@ -399,6 +416,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 						if (enemy.health <= 0) {
 							if (mtl.dragon) {
 								mtl.dragon = false;
+								mtl.dragonDead = true;
 							}
 							currentState = GAME;
 							enemy.health = enemy.maxHealth;
@@ -428,6 +446,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 						if (enemy.health <= 0) {
 							if (mtl.dragon) {
 								mtl.dragon = false;
+								mtl.dragonDead = true;
 							}
 							currentState = GAME;
 							enemy.health = enemy.maxHealth;
@@ -442,6 +461,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 						if (enemy.health <= 0) {
 							if (mtl.dragon) {
 								mtl.dragon = false;
+								mtl.dragonDead = true;
 							}
 							currentState = GAME;
 							enemy.health = enemy.maxHealth;
@@ -472,6 +492,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		}
 
 	}
+	
 
 	@Override
 	public void actionPerformed(ActionEvent e) {

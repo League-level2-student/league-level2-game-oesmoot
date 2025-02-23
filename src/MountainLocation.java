@@ -9,6 +9,7 @@ House house1 = new House(50,50,100,100);
 NPC npc1 = new NPC(250,250,10,10);
 boolean dragon = false;
 boolean dragonDead = false;
+Dragon dragonObj = new Dragon(140, 140, 200, 200, 50, 50, 5, 1000);
 MountainLocation(){
 	
 }
@@ -84,8 +85,7 @@ MountainLocation(){
 			g.setColor(Color.gray);
 			g.fillRect(0, 0, RPGRunner.WIDTH, RPGRunner.HEIGHT);
 			if(!dragonDead) {
-				g.setColor(Color.red);
-				g.fillRect(140, 140, 200, 200);
+				dragonObj.draw(g);
 			}
 		}
 	}
