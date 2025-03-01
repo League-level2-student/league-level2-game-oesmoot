@@ -10,6 +10,7 @@ NPC npc1 = new NPC(250,250,10,10);
 boolean dragon = false;
 boolean dragonDead = false;
 Dragon dragonObj = new Dragon(140, 140, 200, 200, 50, 50, 5, 1000);
+boolean key = true;
 MountainLocation(){
 	
 }
@@ -62,6 +63,10 @@ MountainLocation(){
 					
 				}
 			}
+			if(dragonDead) {
+				key = true;
+			}
+			
 			
 		}
 	}

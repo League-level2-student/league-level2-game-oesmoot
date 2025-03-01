@@ -50,8 +50,10 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	Dungeon dungeon = new Dungeon();
 	final int OVERWORLD = 1;
 	final int MOUNTAIN = 2;
+	final int DUNGEON = 3;
 	int location = OVERWORLD;
 	MountainLocation mtl = new MountainLocation();
+	DungeonLocation dunLoc = new DungeonLocation();
 	Grass grass = new Grass();
 
 	GamePanel() {
@@ -85,6 +87,18 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 				player.x = 250;
 				player.y = 250;
 			}
+			if(player.x>=400&&player.x<=500&&player.y>=100&&player.y<=100) {
+				if(mtl.key) {
+					location = DUNGEON;
+					player.x = 250;
+					player.y = 250;
+				}
+				else {
+					player.x-=10;
+					player.y+=10;
+					JOptionPane.showMessageDialog(null, "it's locked.");
+				}
+			}
 		}
 		if (location == MOUNTAIN) {
 			// g.setColor(Color.gray);
@@ -101,6 +115,11 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 				currentState = FIGHT;
 				changeToFight();
 			}
+		}
+		if(location == DUNGEON) {
+			dunLoc.CheckLocation(player);
+			dunLoc.DrawLocation(g);
+			player.draw(g);
 		}
 	}
 
@@ -336,6 +355,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 							if (mtl.dragon) {
 								mtl.dragon = false;
 								mtl.dragonDead = true;
+								JOptionPane.showMessageDialog(null, "you found a key!");
 							}
 							currentState = GAME;
 							enemy.health = enemy.maxHealth;
@@ -374,6 +394,14 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 					if (player.health <= 0) {
 						currentState = END;
 						player.health = player.maxHealth;
+						player.MP = player.maxMP;
+						mtl.dragon = true;
+						location = OVERWORLD;
+						player.x = 250;
+						player.y = 250;
+						enemy.health = 0;
+						player.XPNeedTotal = 100;
+						player.XPNeed = player.XPNeedTotal;
 					}
 				}
 				if (isDoingMagic) {
@@ -387,6 +415,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 							if (mtl.dragon) {
 								mtl.dragon = false;
 								mtl.dragonDead = true;
+								JOptionPane.showMessageDialog(null, "you found a key!");
 							}
 							currentState = GAME;
 							enemy.health = enemy.maxHealth;
@@ -417,6 +446,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 							if (mtl.dragon) {
 								mtl.dragon = false;
 								mtl.dragonDead = true;
+								JOptionPane.showMessageDialog(null, "you found a key!");
 							}
 							currentState = GAME;
 							enemy.health = enemy.maxHealth;
@@ -447,6 +477,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 							if (mtl.dragon) {
 								mtl.dragon = false;
 								mtl.dragonDead = true;
+								JOptionPane.showMessageDialog(null, "you found a key!");
 							}
 							currentState = GAME;
 							enemy.health = enemy.maxHealth;
@@ -462,6 +493,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 							if (mtl.dragon) {
 								mtl.dragon = false;
 								mtl.dragonDead = true;
+								JOptionPane.showMessageDialog(null, "you found a key!");
 							}
 							currentState = GAME;
 							enemy.health = enemy.maxHealth;
@@ -483,9 +515,16 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 						}
 					}
 					if (player.health <= 0) {
-						currentState = END;
+						currentState = GAME;
 						player.health = player.maxHealth;
 						player.MP = player.maxMP;
+						mtl.dragon = true;
+						location = OVERWORLD;
+						player.x = 250;
+						player.y = 250;
+						enemy.health = 0;
+						player.XPNeedTotal = 100;
+						player.XPNeed = player.XPNeedTotal;
 					}
 				}
 			}
