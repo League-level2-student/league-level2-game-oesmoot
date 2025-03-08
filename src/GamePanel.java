@@ -37,11 +37,11 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	final int RUN = 7;
 	int battleChoice = ATTACK;
 	boolean isDoingMagic = false;
-	Spell spell1 = new Fireball(2, 99, 1);
+	Spell spell1 = new MagicMissile((player.health/2), 25, 2);
 	Spell spell2 = new Fireball(2, 99, 1);
 	Spell spell3 = new Fireball(2, 99, 1);
 	Spell spell4 = new Fireball(2, 99, 1);
-	String firstSpell = "fireball";
+	String firstSpell = "MagMissl";
 	String secondSpell = "fireball";
 	String thirdSpell = "fireball";
 	String fourthSpell = "fireball";
@@ -55,6 +55,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	MountainLocation mtl = new MountainLocation();
 	DungeonLocation dunLoc = new DungeonLocation();
 	Grass grass = new Grass();
+	Death death = new Death();
 
 	GamePanel() {
 		titleFont = new Font("Arial", Font.PLAIN, 48);
@@ -69,11 +70,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	}
 
 	void drawEndState(Graphics g) {
-		g.setColor(Color.red);
-		g.fillRect(0, 0, RPGRunner.WIDTH, RPGRunner.HEIGHT);
-		g.setFont(enterFont);
-		g.setColor(Color.black);
-		g.drawString("Zajef'd your last 37?", 50, 235);
+		death.draw(g);
 	}
 
 	void drawGameState(Graphics g) {
@@ -238,7 +235,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 				}
 			}
 			if(mtl.dragon) {
-				enemy = new Dragon(170, 150, 150, 150, 50, 50, 5, 1000);
+				enemy = new Dragon(170, 150, 150, 150, 50, 45, 3, 1000);
 			}
 
 		}
@@ -266,7 +263,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 				if (player.y > 0) {
 					player.y -= player.speed;
 				}
-				rand = ran.nextInt(100);
+				rand = ran.nextInt(25);
 				if (rand == 1) {
 					currentState = FIGHT;
 					changeToFight();
@@ -277,7 +274,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 				if (player.y < 490) {
 					player.y += player.speed;
 				}
-				rand = ran.nextInt(100);
+				rand = ran.nextInt(25);
 				if (rand == 1) {
 					currentState = FIGHT;
 					changeToFight();
@@ -287,7 +284,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 				if (player.x > 0) {
 					player.x -= player.speed;
 				}
-				rand = ran.nextInt(100);
+				rand = ran.nextInt(25);
 				if (rand == 1) {
 					currentState = FIGHT;
 					changeToFight();
@@ -297,7 +294,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 				if (player.x < 490) {
 					player.x += player.speed;
 				}
-				rand = ran.nextInt(100);
+				rand = ran.nextInt(25);
 				if (rand == 1) {
 					currentState = FIGHT;
 					changeToFight();
@@ -384,6 +381,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 					}
 					if (battleChoice == 6) {
 						isDoingMagic = true;
+						return;
+						
 					}
 					if (battleChoice == 7) {
 						roll = ran.nextInt(3);
@@ -395,7 +394,9 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 						currentState = END;
 						player.health = player.maxHealth;
 						player.MP = player.maxMP;
-						mtl.dragon = true;
+						mtl.dragon = false;
+						mtl.dragonDead = false;
+						mtl.location = 1;
 						location = OVERWORLD;
 						player.x = 250;
 						player.y = 250;
@@ -515,10 +516,12 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 						}
 					}
 					if (player.health <= 0) {
-						currentState = GAME;
+						currentState = END;
 						player.health = player.maxHealth;
 						player.MP = player.maxMP;
-						mtl.dragon = true;
+						mtl.dragon = false;
+						mtl.dragonDead = false;
+						mtl.location = 1;
 						location = OVERWORLD;
 						player.x = 250;
 						player.y = 250;

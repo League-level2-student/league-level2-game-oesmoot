@@ -41,7 +41,14 @@ MountainLocation(){
 			if(player.x==250&&player.y==250) {
 				player.x = 250;
 				player.y = 260;
-				JOptionPane.showMessageDialog(null, "help! there's a big scary monster at the top of the mountain! can you defeat him?");
+				if(!dragonDead) {
+					JOptionPane.showMessageDialog(null, "help! there's a big scary monster at the top of the mountain! can you defeat him?");
+
+				}
+				else {
+					JOptionPane.showMessageDialog(null, "Oh thank you! I was worried there for a second that you were dead!");
+
+				}
 			}
 			if(player.y<=500&&player.y>=490) {
 				location = 1;
