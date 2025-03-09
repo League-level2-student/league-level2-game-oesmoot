@@ -122,7 +122,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 
 	void drawFightState(Graphics g) {
 		g.setColor(Color.gray);
-		g.fillRect(0, 0, 500, 400);
+		g.fillRect(0, 0, 500, 500);
 		g.setColor(Color.white);
 		g.fillRect(0, 401, 500, 100);
 		enemy.draw(g);
