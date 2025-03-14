@@ -15,6 +15,11 @@ boolean button1On = false;
 boolean button2On = false;
 boolean button3On = false;
 boolean sequenceComplete = false;
+Bomb bomb = new Bomb(250,230);
+boolean bombYes = false;
+boolean hasBomb = false;
+Blockage blockage = new Blockage(225,480);
+boolean blockageDestroyed = false;
 
 DungeonLocation(){
 	
@@ -47,7 +52,7 @@ void CheckLocation (Player player) {
 			
 		}
 	if(location == 2) {
-		if(!hasKey1) {
+
 			if(player.y>=480&&player.y<=500&&player.x>=0&&player.x<=225) {
 				player.y-=10;
 			}
@@ -60,10 +65,15 @@ void CheckLocation (Player player) {
 			}
 			
 			
-		}
+		
 		if(hasKey1) {
-			if(player.y>=480) {
+			if(player.y>=480&&player.x>=225&&player.x<=265) {
+				if(hasBomb) {
+					blockageDestroyed = true;
+				}
+				else {
 				player.y -=10;
+				}
 			}
 		}
 		if(!hasKey1) {
@@ -118,6 +128,12 @@ void CheckLocation (Player player) {
 			button3On = false;
 			JOptionPane.showMessageDialog(null, "Sequence Complete!");
 		}
+		if(sequenceComplete && !hasBomb) {
+			bombYes=true;
+			if(player.x == bomb.x &&player.y == bomb.y) {
+				hasBomb = true;
+			}
+		}
 	}
 	}
 	
@@ -147,7 +163,9 @@ void DrawLocation (Graphics g) {
 		g.fillRect(0, 0, 225, 20);
 		g.fillRect(275, 0, 225, 20);
 		if(hasKey1) {
-			g.fillRect(225, 480, 50, 20);
+			if(!blockageDestroyed) {
+				blockage.draw(g);
+			}
 		}
 		if(!hasKey1) {
 			key.draw(g);
@@ -159,6 +177,9 @@ void DrawLocation (Graphics g) {
 		button1.draw(g);
 		button2.draw(g);
 		button3.draw(g);
+		if(bombYes) {
+			bomb.draw(g);
+		}
 	}
 }
 }
