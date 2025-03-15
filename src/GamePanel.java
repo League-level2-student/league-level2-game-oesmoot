@@ -117,6 +117,14 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 			dunLoc.CheckLocation(player);
 			dunLoc.DrawLocation(g);
 			player.draw(g);
+			
+			if(dunLoc.trollActive) {
+				currentState = FIGHT;
+				changeToFight();
+			}
+			if(dunLoc.gameBeaten) {
+				
+			}
 		}
 	}
 
@@ -226,7 +234,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	
 	public void changeToFight() {
 		if (currentState == FIGHT) {
-			if (mtl.dragon == false) {
+			if (mtl.dragon == false&&dunLoc.trollActive == false) {
 				enemyChoice = ran.nextInt(2);
 				if (enemyChoice == 0) {
 					enemy = new Skeleton(170, 150, 150, 150, 10, 10, 2, 50);
@@ -236,6 +244,9 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 			}
 			if(mtl.dragon) {
 				enemy = new Dragon(170, 150, 150, 150, 50, 45, 3, 1000);
+			}
+			if(dunLoc.trollActive) {
+				enemy = new Troll(170, 150, 150, 150, 60, 60, 7, 2000);
 			}
 
 		}
@@ -354,6 +365,10 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 								mtl.dragonDead = true;
 								JOptionPane.showMessageDialog(null, "you found a key!");
 							}
+							if(dunLoc.trollActive) {
+								dunLoc.trollActive = false;
+								dunLoc.trollDead = true;
+							}
 							currentState = GAME;
 							enemy.health = enemy.maxHealth;
 							player.XPNeed -= enemy.XP;
@@ -403,6 +418,12 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 						enemy.health = 0;
 						player.XPNeedTotal = 100;
 						player.XPNeed = player.XPNeedTotal;
+						dunLoc.trollActive = false;
+						dunLoc.trollDead = false;
+						dunLoc.hasBomb = false;
+						dunLoc.blockageDestroyed = false;
+						dunLoc.bombYes = false;
+						dunLoc.hasKey1 = false;
 					}
 				}
 				if (isDoingMagic) {
@@ -417,6 +438,10 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 								mtl.dragon = false;
 								mtl.dragonDead = true;
 								JOptionPane.showMessageDialog(null, "you found a key!");
+							}
+							if(dunLoc.trollActive) {
+								dunLoc.trollActive = false;
+								dunLoc.trollDead = true;
 							}
 							currentState = GAME;
 							enemy.health = enemy.maxHealth;
@@ -449,6 +474,10 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 								mtl.dragonDead = true;
 								JOptionPane.showMessageDialog(null, "you found a key!");
 							}
+							if(dunLoc.trollActive) {
+								dunLoc.trollActive = false;
+								dunLoc.trollDead = true;
+							}
 							currentState = GAME;
 							enemy.health = enemy.maxHealth;
 							player.XPNeed -= enemy.XP;
@@ -480,6 +509,10 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 								mtl.dragonDead = true;
 								JOptionPane.showMessageDialog(null, "you found a key!");
 							}
+							if(dunLoc.trollActive) {
+								dunLoc.trollActive = false;
+								dunLoc.trollDead = true;
+							}
 							currentState = GAME;
 							enemy.health = enemy.maxHealth;
 						}
@@ -495,6 +528,10 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 								mtl.dragon = false;
 								mtl.dragonDead = true;
 								JOptionPane.showMessageDialog(null, "you found a key!");
+							}
+							if(dunLoc.trollActive) {
+								dunLoc.trollActive = false;
+								dunLoc.trollDead = true;
 							}
 							currentState = GAME;
 							enemy.health = enemy.maxHealth;
@@ -521,6 +558,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 						player.MP = player.maxMP;
 						mtl.dragon = false;
 						mtl.dragonDead = false;
+						dunLoc.trollActive = false;
+						dunLoc.trollDead = false;
 						mtl.location = 1;
 						location = OVERWORLD;
 						player.x = 250;
@@ -528,6 +567,10 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 						enemy.health = 0;
 						player.XPNeedTotal = 100;
 						player.XPNeed = player.XPNeedTotal;
+						dunLoc.hasBomb = false;
+						dunLoc.blockageDestroyed = false;
+						dunLoc.bombYes = false;
+						dunLoc.hasKey1 = false;
 					}
 				}
 			}

@@ -20,6 +20,11 @@ boolean bombYes = false;
 boolean hasBomb = false;
 Blockage blockage = new Blockage(225,480);
 boolean blockageDestroyed = false;
+Troll troll = new Troll(140, 140, 200, 200, 60, 60, 7, 2000);
+boolean trollDead = false;
+boolean trollActive = false;
+Portal portal = new Portal();
+boolean gameBeaten = false;
 
 DungeonLocation(){
 	
@@ -47,6 +52,15 @@ void CheckLocation (Player player) {
 			if(player.x>=480&&player.x<=500&&player.y>=225&&player.y<=265) {
 				player.x-=10;
 				JOptionPane.showMessageDialog(null, "It's locked.");
+			}
+		}
+		if(blockageDestroyed && !trollDead) {
+			trollActive = true;
+		}
+		if(hasKey1) {
+			if(player.x>=490&&player.x<=500&&player.y>=225&&player.y<=265) {
+				location = 4;
+				player.x = 20;
 			}
 		}
 			
@@ -135,6 +149,11 @@ void CheckLocation (Player player) {
 			}
 		}
 	}
+	if(location == 4) {
+		if(player.x>= 200&&player.x<= 300&&player.y>=200&&player.y<=300) {
+			gameBeaten = true;
+		}
+	}
 	}
 	
 
@@ -152,6 +171,10 @@ void DrawLocation (Graphics g) {
 			g.setColor(brown);
 			g.fillRect(480,225,20,50);
 		}
+		if(blockageDestroyed&&!trollDead) {
+			troll.draw(g);
+		}
+		
 		
 	}
 	if(location == 2) {
@@ -177,9 +200,17 @@ void DrawLocation (Graphics g) {
 		button1.draw(g);
 		button2.draw(g);
 		button3.draw(g);
-		if(bombYes) {
+		g.setColor(Color.gray);
+		g.fillRect(0, 480, 225, 20);
+		g.fillRect(275, 480, 225, 20);
+		if(bombYes&& !hasBomb) {
 			bomb.draw(g);
 		}
+	}
+	if(location == 4) {
+		g.setColor(Color.darkGray);
+		g.fillRect(0, 0, 500, 500);
+		portal.draw(g);
 	}
 }
 }
