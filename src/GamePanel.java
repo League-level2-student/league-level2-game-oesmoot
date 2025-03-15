@@ -51,11 +51,13 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	final int OVERWORLD = 1;
 	final int MOUNTAIN = 2;
 	final int DUNGEON = 3;
+	final int GAMEFINISH = 4;
 	int location = OVERWORLD;
 	MountainLocation mtl = new MountainLocation();
 	DungeonLocation dunLoc = new DungeonLocation();
 	Grass grass = new Grass();
 	Death death = new Death();
+	EndScreen end = new EndScreen();
 
 	GamePanel() {
 		titleFont = new Font("Arial", Font.PLAIN, 48);
@@ -64,7 +66,9 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		frameDraw = new Timer(1000 / 60, this);
 		frameDraw.start();
 	}
-
+	void drawFinishState(Graphics g) {
+		end.draw(g);
+	}
 	void drawMenuState(Graphics g) {
 		menu.draw(g);
 	}
@@ -123,7 +127,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 				changeToFight();
 			}
 			if(dunLoc.gameBeaten) {
-				
+				currentState = GAMEFINISH;
 			}
 		}
 	}
@@ -215,6 +219,9 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	void updateFightState() {
 
 	}
+	void updateFinishState() {
+		
+	}
 
 	@Override
 	public void paintComponent(Graphics g) {
@@ -229,6 +236,9 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		}
 		if (currentState == FIGHT) {
 			drawFightState(g);
+		}
+		if(currentState == GAMEFINISH) {
+			drawFinishState(g);
 		}
 	}
 	
@@ -590,6 +600,9 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 			updateEndState();
 		} else if (currentState == FIGHT) {
 			updateFightState();
+		}
+		else if(currentState == GAMEFINISH) {
+			updateFinishState();
 		}
 		repaint();
 
