@@ -51,13 +51,15 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	final int OVERWORLD = 1;
 	final int MOUNTAIN = 2;
 	final int DUNGEON = 3;
-	final int GAMEFINISH = 4;
-	int location = OVERWORLD;
+	final int GAMEFINISH = 5;
+	final int UNDERWORLD = 4;
+	int location = UNDERWORLD;
 	MountainLocation mtl = new MountainLocation();
 	DungeonLocation dunLoc = new DungeonLocation();
 	Grass grass = new Grass();
 	Death death = new Death();
 	EndScreen end = new EndScreen();
+	Underworld hell = new Underworld();
 
 	GamePanel() {
 		titleFont = new Font("Arial", Font.PLAIN, 48);
@@ -129,6 +131,11 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 			if(dunLoc.gameBeaten) {
 				currentState = GAMEFINISH;
 			}
+		}
+		if(location == UNDERWORLD) {
+			hell.drawLocation(g);
+			hell.checkLocation(player);
+			player.draw(g);
 		}
 	}
 
@@ -280,7 +287,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 			}
 		}
 		if (currentState == GAME) {
-			if (e.getKeyCode() == KeyEvent.VK_UP) {
+			if (e.getKeyCode() == KeyEvent.VK_UP||e.getKeyCode() == KeyEvent.VK_W) {
 				if (player.y > 0) {
 					player.y -= player.speed;
 				}
@@ -291,7 +298,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 
 				}
 			}
-			if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+			if (e.getKeyCode() == KeyEvent.VK_DOWN||e.getKeyCode() == KeyEvent.VK_S) {
 				if (player.y < 490) {
 					player.y += player.speed;
 				}
@@ -301,7 +308,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 					changeToFight();
 				}
 			}
-			if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+			if (e.getKeyCode() == KeyEvent.VK_LEFT||e.getKeyCode() == KeyEvent.VK_A) {
 				if (player.x > 0) {
 					player.x -= player.speed;
 				}
@@ -311,7 +318,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 					changeToFight();
 				}
 			}
-			if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+			if (e.getKeyCode() == KeyEvent.VK_RIGHT||e.getKeyCode() == KeyEvent.VK_D) {
 				if (player.x < 490) {
 					player.x += player.speed;
 				}
