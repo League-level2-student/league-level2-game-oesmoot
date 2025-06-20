@@ -4,12 +4,18 @@ import java.awt.Graphics;
 import javax.swing.JOptionPane;
 
 public class Underworld {
-int location = 2;
+int location = 7;
 Color darkRed = new Color(179, 12, 0);
 HellBG hell = new HellBG();
 Chest chest1 = new Chest();
 Chest chest2 = new Chest();
+Portal portal = new Portal();
+Satan satan = new Satan(150, 150, 200, 200, 0, 0, 0, 0);
 boolean itemGot = false;
+boolean satanActive = false;
+boolean satanDead = false;
+boolean GameBeaten = false;
+EndScreen fin = new EndScreen();
 
 Underworld(){
 	
@@ -53,7 +59,7 @@ void checkLocation(Player player) {
 			player.x = 270;
 			player.y = 310;
 			itemGot = true;
-			JOptionPane.showMessageDialog(null, "you got a new spell!");
+			JOptionPane.showMessageDialog(null, "Fists of steel!(damage up!)");
 			player.damage += 10;
 		}
 	}
@@ -62,12 +68,37 @@ void checkLocation(Player player) {
 			location = 2;
 			player.x = 20;
 		}
+		if(player.y>=490) {
+			location = 5;
+			player.y = 20;
+		}
 		if(player.x>=250&&player.x<=300&&player.y>=250&&player.y<=300) {
 			player.x = 270;
 			player.y = 310;
 			itemGot = true;
-			JOptionPane.showMessageDialog(null, "Damage up!");
+			JOptionPane.showMessageDialog(null, "A shiny new sword!(damage up!)");
 			player.damage += 10;
+		}
+	}
+	if(location == 5) {
+		if(player.x>= 200&&player.x<= 300&&player.y>=200&&player.y<=300) {
+			location = 6;
+			player.y = 20;
+		}
+	}
+	if(location == 6) {
+		if(!satanDead) {
+		if(player.x>=150&&player.x<=350&&player.y>=150&&player.y<=350) {
+			satanActive = true;
+		}
+		}
+		if(satanDead) {
+			if(player.x>= 200&&player.x<= 300&&player.y>=200&&player.y<=300) {
+				JOptionPane.showMessageDialog(null, "with the destruction of satan, you have cleansed the world of all it's evil!");
+				location = 7;
+				GameBeaten = true;
+				
+			}
 		}
 	}
 }
@@ -103,6 +134,26 @@ void drawLocation (Graphics g) {
 			chest1.draw(g);
 		}
 		
+	}
+	if(location ==5) {
+		g.setColor(Color.red);
+		g.fillRect(0, 0, 500, 500);
+		portal.draw(g);
+		
+	}
+	if(location == 6) {
+		g.setColor(Color.red);
+		g.fillRect(0, 0, 500, 500);
+		if(!satanDead) {
+			satan.draw(g);
+		}
+		if(satanDead) {
+			portal.draw(g);
+		}
+	}
+	if(location == 7) {
+		g.setColor(Color.black);
+		g.fillRect(0, 0, 500, 500);
 	}
 }
 }

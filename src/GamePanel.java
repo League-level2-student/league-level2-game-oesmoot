@@ -53,7 +53,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	final int DUNGEON = 3;
 	final int GAMEFINISH = 5;
 	final int UNDERWORLD = 4;
-	int location = UNDERWORLD;
+	int location = OVERWORLD;
 	MountainLocation mtl = new MountainLocation();
 	DungeonLocation dunLoc = new DungeonLocation();
 	Grass grass = new Grass();
@@ -136,6 +136,14 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 			hell.drawLocation(g);
 			hell.checkLocation(player);
 			player.draw(g);
+			
+			if(hell.satanActive) {
+				currentState = FIGHT;
+				changeToFight();
+			}
+			if(hell.GameBeaten) {
+				currentState = GAMEFINISH;
+			}
 		}
 	}
 
@@ -251,7 +259,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	
 	public void changeToFight() {
 		if (currentState == FIGHT) {
-			if (mtl.dragon == false&&dunLoc.trollActive == false) {
+			if (mtl.dragon == false&&dunLoc.trollActive == false&&hell.satanActive ==false) {
 				enemyChoice = ran.nextInt(2);
 				if (enemyChoice == 0) {
 					enemy = new Skeleton(170, 150, 150, 150, 10, 10, 2, 50);
@@ -264,6 +272,9 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 			}
 			if(dunLoc.trollActive) {
 				enemy = new Troll(170, 150, 150, 150, 60, 60, 7, 2000);
+			}
+			if(hell.satanActive) {
+				enemy = new Satan(170,150,150,150,70,70,10,3000);
 			}
 
 		}
@@ -386,6 +397,10 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 								dunLoc.trollActive = false;
 								dunLoc.trollDead = true;
 							}
+							if(hell.satanActive) {
+								hell.satanActive = false;
+								hell.satanDead = true;
+							}
 							currentState = GAME;
 							enemy.health = enemy.maxHealth;
 							player.XPNeed -= enemy.XP;
@@ -429,7 +444,9 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 						mtl.dragon = false;
 						mtl.dragonDead = false;
 						mtl.location = 1;
-						location = OVERWORLD;
+						dunLoc.location = 1;
+						hell.location = 1;
+						//location = OVERWORLD;
 						player.x = 250;
 						player.y = 250;
 						enemy.health = 0;
@@ -441,6 +458,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 						dunLoc.blockageDestroyed = false;
 						dunLoc.bombYes = false;
 						dunLoc.hasKey1 = false;
+						hell.satanActive = false;
+						hell.satanDead = false;
 					}
 				}
 				if (isDoingMagic) {
@@ -459,6 +478,10 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 							if(dunLoc.trollActive) {
 								dunLoc.trollActive = false;
 								dunLoc.trollDead = true;
+							}
+							if(hell.satanActive) {
+								hell.satanActive = false;
+								hell.satanDead = true;
 							}
 							currentState = GAME;
 							enemy.health = enemy.maxHealth;
@@ -577,6 +600,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 						mtl.dragonDead = false;
 						dunLoc.trollActive = false;
 						dunLoc.trollDead = false;
+						hell.satanActive = false;
+						hell.satanDead = false;
 						mtl.location = 1;
 						location = OVERWORLD;
 						player.x = 250;

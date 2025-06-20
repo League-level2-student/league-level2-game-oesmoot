@@ -8,6 +8,7 @@ import javax.imageio.ImageIO;
 public class Player extends GameObject {
 	int maxHealth = 20;
 	int health = maxHealth;
+	//change damage back to 5 before release
 	int damage = 5;
 	int maxMP = 10;
 	int MP = maxMP;
