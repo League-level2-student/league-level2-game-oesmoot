@@ -94,6 +94,8 @@ void checkLocation(Player player) {
 		}
 		if(satanDead) {
 			if(player.x>= 200&&player.x<= 300&&player.y>=200&&player.y<=300) {
+				player.x = 0;
+				player.y = 0;
 				JOptionPane.showMessageDialog(null, "with the destruction of satan, you have cleansed the world of all it's evil!");
 				location = 7;
 				GameBeaten = true;

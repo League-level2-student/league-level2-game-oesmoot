@@ -53,7 +53,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	final int DUNGEON = 3;
 	final int GAMEFINISH = 5;
 	final int UNDERWORLD = 4;
-	int location = OVERWORLD;
+	int location = UNDERWORLD;
 	MountainLocation mtl = new MountainLocation();
 	DungeonLocation dunLoc = new DungeonLocation();
 	Grass grass = new Grass();
@@ -129,7 +129,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 				changeToFight();
 			}
 			if(dunLoc.gameBeaten) {
-				currentState = GAMEFINISH;
+				//currentState = GAMEFINISH;
+				location = UNDERWORLD;
 			}
 		}
 		if(location == UNDERWORLD) {

@@ -152,6 +152,7 @@ void CheckLocation (Player player) {
 	if(location == 4) {
 		if(player.x>= 200&&player.x<= 300&&player.y>=200&&player.y<=300) {
 			gameBeaten = true;
+			
 		}
 	}
 	}
